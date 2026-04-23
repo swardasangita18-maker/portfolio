@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swarda Gharte — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE6;
+    --blush: #E8C4B8;
+    --rose: #C97D6A;
+    --deep: #3D2B2B;
+    --mocha: #7A5C58;
+    --sage: #8FAF9A;
+    --gold: #C9A96E;
+    --white: #FDFAF7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--deep);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--rose);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: multiply;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--rose);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.3s ease, width 0.3s, height 0.3s;
+    opacity: 0.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem 4rem;
+    background: transparent;
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(245,239,230,0.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 20px rgba(61,43,43,0.08);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--deep);
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mocha);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1.5px;
+    background: var(--rose);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--rose); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 5rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 40px; height: 1px;
+    background: var(--rose);
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--deep);
+    margin-bottom: 0.3rem;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--mocha);
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--mocha);
+    max-width: 420px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--deep);
+    color: var(--cream);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: background 0.3s, transform 0.3s;
+    width: fit-content;
+  }
+  .hero-cta:hover { background: var(--rose); transform: translateY(-2px); }
+  .hero-cta svg { transition: transform 0.3s; }
+  .hero-cta:hover svg { transform: translateX(5px); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--blush) 0%, #D4A89A 40%, var(--rose) 100%);
+  }
+
+  .hero-visual::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseRing 4s ease-in-out infinite;
+  }
+  .hero-visual::after {
+    content: '';
+    position: absolute;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes pulseRing {
+    0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+  }
+
+  .hero-floating-text {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(255,255,255,0.15);
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    pointer-events: none;
+  }
+
+  .hero-initials {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 7rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    z-index: 2;
+    line-height: 1;
+    text-align: center;
+  }
+  .hero-initials span {
+    display: block;
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  /* Geometric deco */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    pointer-events: none;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 7rem 5rem; }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--rose);
+    display: inline-block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--deep);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-title em { font-style: italic; color: var(--rose); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 480px;
+  }
+
+  .about-bg-shape {
+    position: absolute;
+    width: 320px; height: 400px;
+    background: linear-gradient(160deg, var(--blush), var(--sage));
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    top: 20px; left: 20px;
+    opacity: 0.4;
+    animation: morphBlob 8s ease-in-out infinite;
+  }
+
+  @keyframes morphBlob {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  }
+
+  .about-card {
+    position: absolute;
+    background: var(--deep);
+    color: var(--cream);
+    padding: 2rem;
+    width: 220px;
+    bottom: 30px; right: 0;
+    animation: floatUp 6s ease-in-out infinite;
+  }
+  .about-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--rose);
+    line-height: 1;
+  }
+  .about-card-text {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+    opacity: 0.7;
+  }
+
+  @keyframes floatUp {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .about-content { }
+
+  .about-bio {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--mocha);
+    margin-bottom: 2.5rem;
+  }
+
+  .about-interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+  }
+
+  .interest-tag {
+    padding: 0.45rem 1.1rem;
+    border: 1px solid var(--blush);
+    font-size: 0.8rem;
+    color: var(--mocha);
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .interest-tag:hover {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+
+  /* ── SKILLS ── */
+  #skills {
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+  #skills .section-label { color: var(--blush); }
+  #skills .section-label::before { background: var(--blush); }
+  #skills .section-title { color: var(--cream); }
+  #skills .section-title em { color: var(--blush); }
+
+  .skills-bg-text {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 18rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.02);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .skill-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 2rem 1.8rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--rose);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .skill-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-4px); }
+  .skill-card:hover::before { transform: scaleX(1); }
+
+  .skill-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .skill-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-desc {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: rgba(245,239,230,0.5);
+  }
+
+  .skill-badge {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blush);
+    border: 1px solid rgba(232,196,184,0.3);
+    padding: 0.25rem 0.7rem;
+  }
+
+  /* ── CERTIFICATIONS ── */
+  #certifications {
+    background: var(--cream);
+    position: relative;
+  }
+
+  .certs-intro {
+    max-width: 540px;
+    margin-bottom: 3.5rem;
+  }
+
+  .certs-intro p {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--mocha);
+    margin-top: 1rem;
+  }
+
+  .certs-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .cert-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    background: var(--white);
+    border-left: 3px solid var(--rose);
+    transition: all 0.35s;
+    cursor: default;
+  }
+  .cert-item:hover {
+    transform: translateX(6px);
+    box-shadow: 6px 0 20px rgba(201,125,106,0.15);
+  }
+
+  .cert-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--blush);
+    min-width: 40px;
+    line-height: 1;
+  }
+
+  .cert-text {}
+  .cert-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--deep);
+    margin-bottom: 0.2rem;
+  }
+  .cert-org {
+    font-size: 0.78rem;
+    color: var(--mocha);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CREATIVE ── */
+  #creative {
+    background: linear-gradient(160deg, var(--blush) 0%, #D4A89A 50%, var(--cream) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .creative-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .creative-card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s;
+  }
+  .creative-card:hover { transform: translateY(-6px); }
+
+  .creative-icon {
+    font-size: 2.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .creative-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--deep);
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+
+  .creative-body {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--mocha);
+  }
+
+  .creative-deco {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(201,125,106,0.15);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .contact-text .section-title { margin-bottom: 1.5rem; }
+
+  .contact-desc {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--mocha);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    text-decoration: none;
+    color: var(--deep);
+    font-size: 0.9rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--blush);
+    transition: all 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--deep);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s;
+    z-index: 0;
+  }
+  .contact-link:hover::before { transform: scaleX(1); }
+  .contact-link:hover { color: var(--cream); border-color: var(--deep); }
+  .contact-link span { position: relative; z-index: 1; }
+  .contact-link-icon { font-size: 1.2rem; position: relative; z-index: 1; }
+
+  .contact-visual {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--deep);
+    line-height: 1.5;
+    text-align: center;
+    position: relative;
+  }
+  .contact-quote::before {
+    content: '"';
+    font-size: 8rem;
+    color: var(--blush);
+    position: absolute;
+    top: -3rem; left: -2rem;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep);
+    color: var(--cream);
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.4rem 2rem; }
+    section { padding: 5rem 2rem; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 9rem 2rem 4rem; }
+    .hero-right { display: none; }
+    #about, #contact { grid-template-columns: 1fr; }
+    .about-visual { display: none; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .certs-list { grid-template-columns: 1fr; }
+    .creative-grid { grid-template-columns: 1fr; }
+    .nav-links { gap: 1.4rem; }
+  }
+
+  @media (max-width: 600px) {
+    .skills-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">SG</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#creative">Creative</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Chemical Engineer & Creative Thinker</div>
+    <h1 class="hero-name">Swarda<br><em>Gharte</em></h1>
+    <p class="hero-title">B.Tech Chemical Engineering · MIT Academy of Engineering</p>
+    <p class="hero-desc">
+      Blending science with creativity — aspiring cosmetic chemist, 
+      coder, and poet, passionate about designing products that are both 
+      innovative and deeply human.
+    </p>
+    <a href="#about" class="hero-cta">
+      Explore my work
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="deco-circle" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div class="deco-circle" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div class="hero-floating-text">SG</div>
+      <div class="hero-initials">
+        SG
+        <span>Swarda Gharte</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual fade-in">
+    <div class="about-bg-shape"></div>
+    <div class="about-card">
+      <div class="about-card-num">∞</div>
+      <div class="about-card-text">Science × Creativity</div>
+    </div>
+  </div>
+
+  <div class="about-content fade-in">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">Where Science<br>Meets <em>Creativity</em></h2>
+    <p class="about-bio">
+      I am a Chemical Engineering undergraduate with a deep fascination for the 
+      cosmetic and personal care industry. My goal is to contribute to developing 
+      innovative, safe, and effective products that touch people's everyday lives.
+    </p>
+    <p class="about-bio">
+      Alongside my core studies, I've built skills in C++ and Python that sharpen 
+      my analytical thinking. I'm also a passionate writer — someone who finds the 
+      same beauty in a well-written stanza as in a perfectly balanced formula.
+    </p>
+    <div class="about-interests">
+      <span class="interest-tag">Cosmetic Chemistry</span>
+      <span class="interest-tag">Product Development</span>
+      <span class="interest-tag">Python & C++</span>
+      <span class="interest-tag">Poetry Writing</span>
+      <span class="interest-tag">Literature</span>
+      <span class="interest-tag">Artificial Intelligence</span>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-bg-text">SKILLS</div>
+  <div class="section-label fade-in">Technical Proficiency</div>
+  <h2 class="section-title fade-in">What I <em>Know</em></h2>
+
+  <div class="skills-grid">
+    <div class="skill-card fade-in">
+      <span class="skill-icon">🐍</span>
+      <div class="skill-name">Python</div>
+      <p class="skill-desc">Data analysis, scripting, and problem-solving with Python. Strong foundation in programming logic and automation.</p>
+      <span class="skill-badge">Programming</span>
+    </div>
+
+    <div class="skill-card fade-in">
+      <span class="skill-icon">⚙️</span>
+      <div class="skill-name">C++</div>
+      <p class="skill-desc">Object-oriented programming and algorithmic thinking using C++. Comfortable with data structures and core CS concepts.</p>
+      <span class="skill-badge">Programming</span>
+    </div>
+
+    <div class="skill-card fade-in">
+      <span class="skill-icon">🧪</span>
+      <div class="skill-name">Chemical Engineering</div>
+      <p class="skill-desc">Core engineering principles applied to chemical processes, with a focus on cosmetic and personal care formulations.</p>
+      <span class="skill-badge">Domain Expertise</span>
+    </div>
+
+    <div class="skill-card fade-in">
+      <span class="skill-icon">🤖</span>
+      <div class="skill-name">Artificial Intelligence</div>
+      <p class="skill-desc">Understanding of AI concepts, tools, and ethical applications. Skilled in leveraging AI for research and productivity.</p>
+      <span class="skill-badge">Emerging Tech</span>
+    </div>
+
+    <div class="skill-card fade-in">
+      <span class="skill-icon">✍️</span>
+      <div class="skill-name">Communication</div>
+      <p class="skill-desc">Strong written and verbal communication. Experienced in technical writing, creative expression, and public-facing content.</p>
+      <span class="skill-badge">Soft Skill</span>
+    </div>
+
+    <div class="skill-card fade-in">
+      <span class="skill-icon">🌐</span>
+      <div class="skill-name">Web Development</div>
+      <p class="skill-desc">Building digital portfolios and websites using HTML, CSS, and GitHub Pages as part of Creative Technologies coursework.</p>
+      <span class="skill-badge">Web Tech</span>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="certs-intro fade-in">
+    <div class="section-label">Credentials</div>
+    <h2 class="section-title">Certifications &<br><em>Achievements</em></h2>
+    <p>A collection of certifications reflecting my commitment to continuous learning across technology, AI, and digital literacy.</p>
+  </div>
+
+  <div class="certs-list">
+    <div class="cert-item fade-in">
+      <div class="cert-num">01</div>
+      <div class="cert-text">
+        <div class="cert-title">Python Essentials 1</div>
+        <div class="cert-org">Cisco Networking Academy</div>
+      </div>
+    </div>
+
+    <div class="cert-item fade-in">
+      <div class="cert-num">02</div>
+      <div class="cert-text">
+        <div class="cert-title">Python Essentials 2</div>
+        <div class="cert-org">Cisco Networking Academy</div>
+      </div>
+    </div>
+
+    <div class="cert-item fade-in">
+      <div class="cert-num">03</div>
+      <div class="cert-text">
+        <div class="cert-title">AI Fluency</div>
+        <div class="cert-org">AI Literacy Program</div>
+      </div>
+    </div>
+
+    <div class="cert-item fade-in">
+      <div class="cert-num">04</div>
+      <div class="cert-text">
+        <div class="cert-title">AI Fluency for Non-Profits</div>
+        <div class="cert-org">AI Literacy Program</div>
+      </div>
+    </div>
+
+    <div class="cert-item fade-in">
+      <div class="cert-num">05</div>
+      <div class="cert-text">
+        <div class="cert-title">Claude 101</div>
+        <div class="cert-org">Anthropic</div>
+      </div>
+    </div>
+
+    <div class="cert-item fade-in">
+      <div class="cert-num">06</div>
+      <div class="cert-text">
+        <div class="cert-title">AI Fluency for Students</div>
+        <div class="cert-org">AI Literacy Program</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATIVE -->
+<section id="creative">
+  <div class="section-label fade-in">Beyond Engineering</div>
+  <h2 class="section-title fade-in">The Creative <em>Side</em></h2>
+
+  <div class="creative-grid">
+    <div class="creative-card fade-in">
+      <div class="creative-icon">🖊️</div>
+      <div class="creative-title">Poetry & Writing</div>
+      <p class="creative-body">
+        Words are my first love. I write poetry as a way to process the world around me — 
+        finding meaning in small moments, emotion in imagery, and beauty in the precise 
+        arrangement of language. Writing keeps my thinking sharp and my perspective wide.
+      </p>
+      <div class="creative-deco"></div>
+    </div>
+
+    <div class="creative-card fade-in">
+      <div class="creative-icon">📚</div>
+      <div class="creative-title">Literature & Reading</div>
+      <p class="creative-body">
+        Reading is how I travel without moving. From classic literature to contemporary 
+        science writing, books shape the way I think, argue, empathize, and design. 
+        A good book and a chemical formula have more in common than you'd think — 
+        both are elegant solutions to complex problems.
+      </p>
+      <div class="creative-deco"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-text fade-in">
+    <div class="section-label">Let's Connect</div>
+    <h2 class="section-title">Say <em>Hello</em></h2>
+    <p class="contact-desc">
+      Whether you're interested in collaboration, have a project in mind, 
+      or simply want to connect — I'd love to hear from you.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:swardasangita18@gmail.com" class="contact-link">
+        <span class="contact-link-icon">✉️</span>
+        <span>swardasangita18@gmail.com</span>
+      </a>
+      <a href="https://www.linkedin.com/in/swarda-gharte-815524405" target="_blank" class="contact-link">
+        <span class="contact-link-icon">💼</span>
+        <span>linkedin.com/in/swarda-gharte</span>
+      </a>
+      <a href="https://github.com/swardasangita18github" target="_blank" class="contact-link">
+        <span class="contact-link-icon">🐙</span>
+        <span>github.com/swardasangita18github</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-visual fade-in">
+    <p class="contact-quote">
+      Driven by curiosity, continuous learning, and a desire to blend science with creativity.
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Swarda Gharte · B.Tech Chemical Engineering · MIT Academy of Engineering, Pune</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.transform = `translate(${mouseX - 6}px, ${mouseY - 6}px)`;
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Fade-in on scroll
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  faders.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
